@@ -8,18 +8,19 @@
 
 <body>
     <!--canvas标签创建一个宽高均为500像素，背景为蓝色的矩形画布-->
-    <canvas id="webgl" width="500" height="500" style="background-color: black;"></canvas>
+    <canvas id="webgl" width="500" height="500" style="background-color: blue;"></canvas>
 
     <script id="vertexShader" type="x-shader/x-vertex">
+        attribute vec4 apos;
         void main(){
             gl_PointSize=20.0;
-            gl_Position=vec4(0,0,0,1);
+            gl_Position=apos;
         }
     </script>
 
     <script id="fragShader" type="x-shader/x-fragment">
         void main(){
-            gl_FragColor = vec4(0,0,0.9,1);
+            gl_FragColor = vec4(1.0,0.0,0.0,1);
         }
     </script>
 
@@ -48,8 +49,19 @@
 
         //初始化着色器
         var program = initShader(gl, vertexShaderSource, fragShaderSource);
+
+        //矩形顶点
+        var aposLocation = gl.getAttribLocation(program,'apos')
+        var data = new Float32Array([0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5]);
+        //缓冲区
+        var buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+        gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);
+        gl.vertexAttribPointer(aposLocation,2,gl.FLOAT,false,0,0)
+        gl.enableVertexAttribArray(aposLocation)
+
         //开始绘制，显示器显示结果
-        gl.drawArrays(gl.POINTS, 0, 1);
+        gl.drawArrays(gl.LINE_LOOP, 0, 4);
 
         //声明初始化着色器函数
         function initShader(gl, vertexShaderSource, fragmentShaderSource) {
