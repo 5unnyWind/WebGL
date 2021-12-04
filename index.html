@@ -13,8 +13,10 @@
     <script id="vertexShader" type="x-shader/x-vertex">
         attribute vec4 apos;
         void main(){
+            //矩阵变换向左平移0.4
+            mat4 m4 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, -0.4,0,0,1);
             gl_PointSize=20.0;
-            gl_Position=apos;
+            gl_Position=m4*apos;
         }
     </script>
 
